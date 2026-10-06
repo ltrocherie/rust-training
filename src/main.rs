@@ -3,7 +3,10 @@
  */
 
 use std::io;
+use std::io::Write;
 use rand;
+use std::env;
+use std::fs;
 
 fn integers() {
     let mut car: u8 = 255;
@@ -277,6 +280,37 @@ fn higher_or_lower() {
     }
 }
 
+fn read_drums() {
+    let drum_content = fs::read_to_string("drums.txt").unwrap();
+    let mut phrase = String::from("A drum kit is made of drumsticks");
+    for line in drum_content.lines() {
+        phrase.push_str(", ");
+        phrase.push_str(line);
+    }
+    phrase.push_str(" and the drummer of course!");
+    println!("{phrase}");
+    fs::write("speech.txt", phrase);
+
+    let mut file = fs::OpenOptions::new().append(true).open("speech.txt").unwrap();
+    file.write(b"\nSource: Myself");
+}
+
+fn check_if_name_in_file(file_path: &str, name: &str) {
+    println!("Checking if the file {file_path} contains {name}");
+    if !fs::exists(file_path).unwrap() {
+        println!("The file {file_path} does not exist");
+        return;
+    }
+    let file_content = fs::read_to_string(file_path).unwrap();
+    for line in file_content.lines() {
+        if line.eq(name) {
+            println!("Match found for the name {name}");
+            return;
+        }
+    }
+    println!("The name {name} is absent");
+}
+
 fn main() {
     integers();
     bits();
@@ -317,6 +351,20 @@ fn main() {
 
     random_numbers();
 
-    higher_or_lower();
+    // higher_or_lower();
+    
+    for (index, arg) in env::args().enumerate() {
+        println!("Argument {index} is {arg}");
+    }
+
+    read_drums();
+
+    if env::args().len() >= 2 {
+        let arg2 = env::args().nth(2).unwrap();
+        println!("Argument 2 is {arg2}");
+        check_if_name_in_file( &env::args().nth(1).unwrap(),  &env::args().nth(2).unwrap());
+    } else {
+        println!("No second argument to print");
+    }
 
 }

@@ -1,0 +1,9 @@
+Kick drum
+Snare drum
+High Tom
+Middle Tom
+Low Tom
+Hi-Hat
+Crash
+Ride
+2nd Crash
