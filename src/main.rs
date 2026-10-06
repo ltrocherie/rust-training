@@ -327,6 +327,14 @@ impl Car {
     fn increase_engine_capacity(&mut self, liters: f64) {
         self.engine_capacity += liters;
     }
+
+    fn new(name: &str) -> Car {
+        return Car {
+            name: String::from(name),
+            crew: 4,
+            engine_capacity: 2.0
+        };
+    }
 }
 
 fn structs() {
@@ -356,6 +364,16 @@ fn structs() {
 
     clio.increase_engine_capacity(1 as f64);
     println!("Modified Clio is {clio:?}");
+
+    let scenic = Car::new("Renault Scenic");
+    println!("Scenic is {scenic:?}");
+}
+
+struct Color(u8, u8, u8); // RGB
+
+fn colors() {
+    let red = Color(255, 0, 0);
+    println!("First value is {}", red.0);
 }
 
 fn main() {
@@ -415,5 +433,6 @@ fn main() {
     }
 
     structs();
+    colors();
 
 }
