@@ -311,6 +311,53 @@ fn check_if_name_in_file(file_path: &str, name: &str) {
     println!("The name {name} is absent");
 }
 
+#[derive(Debug)]
+#[derive(Clone)]
+struct Car {
+    name: String,
+    crew: u8,
+    engine_capacity: f64
+}
+
+impl Car {
+    fn get_name(&self) -> &str {
+        return &self.name;
+    }
+
+    fn increase_engine_capacity(&mut self, liters: f64) {
+        self.engine_capacity += liters;
+    }
+}
+
+fn structs() {
+    let mut z4 = Car {
+        name: String::from("BMW Z4"),
+        crew: 2,
+        engine_capacity: 2.5
+    };
+    println!("Z4 has a {}L engine", z4.engine_capacity);
+
+    let mut clio = Car {
+        name: String::from("Renault Clio"),
+        ..z4
+    };
+
+    let z4clone = Car {
+        ..z4.clone()
+    };
+
+    z4.crew = 1;
+    println!("Z4 is {z4:?}");
+    println!("Z4 clone is {z4clone:?}");
+    println!("Clio is {clio:?}");
+
+    let clio_name = clio.get_name();
+    println!("Clio name is {clio_name}");
+
+    clio.increase_engine_capacity(1 as f64);
+    println!("Modified Clio is {clio:?}");
+}
+
 fn main() {
     integers();
     bits();
@@ -366,5 +413,7 @@ fn main() {
     } else {
         println!("No second argument to print");
     }
+
+    structs();
 
 }
