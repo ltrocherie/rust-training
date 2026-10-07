@@ -5,7 +5,7 @@
 use std::io;
 use std::io::Write;
 use std::mem;
-use std::ops::Add;
+use std::fmt;
 use rand;
 use std::env;
 use std::fs;
@@ -315,6 +315,7 @@ fn check_if_name_in_file(file_path: &str, name: &str) {
 
 #[derive(Debug)]
 #[derive(Clone)]
+#[derive(PartialEq)]
 struct Car {
     name: String,
     crew: u8,
@@ -449,6 +450,41 @@ fn test_sum_boxes() {
     println!("Boxes OK");
 }
 
+trait Description {
+    fn describe(&self) -> String {
+        return String::from("No description");
+    }
+}
+
+impl Description for Car {
+    fn describe(&self) -> String {
+        return format!("The car is named {}, can carry {} people and has a engine of {}L capacity", self.name, self.crew, self.engine_capacity);
+    }
+}
+
+struct Satellite {
+    name: String,
+    velocity: f64,
+    altitude: f64
+}
+
+impl Satellite {
+    fn new(name: &str) -> Satellite {
+        return Satellite { name: String::from(name), velocity: 42.5, altitude: 400.0 }
+    }
+}
+
+impl fmt::Display for Satellite {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        return write!(f, "{} flying at {}m/s and {}km high above Earth", self.name, self.velocity, self.altitude);
+    }
+}
+
+fn trait_satellite() {
+    let hubble = Satellite::new("Hubble Telescope");
+    println!("Hubble: {}", hubble);
+}
+
 fn main() {
     integers();
     bits();
@@ -514,5 +550,10 @@ fn main() {
 
     boxes();
     test_sum_boxes();
+
+    let peugeot = Car::new("Peugeot 208");
+    println!("208: {}", peugeot.describe());
+
+    trait_satellite();
 
 }
