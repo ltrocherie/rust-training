@@ -5,6 +5,7 @@
 use std::io;
 use std::io::Write;
 use std::mem;
+use std::ops::Add;
 use rand;
 use std::env;
 use std::fs;
@@ -432,6 +433,22 @@ fn boxes() {
     println!("The Mustang now takes {} bytes on the stack", mem::size_of_val(&unboxed_car));
 }
 
+fn sum_boxes<T: std::ops::Add<Output = T>>(a: Box<T>, b: Box<T>) -> Box<T> {
+    return Box::new(*a + *b);
+}
+
+fn test_sum_boxes() {
+    let one = Box::new(1);
+    let two = Box::new(2);
+    assert_eq!(*sum_boxes(one, two), 3);
+
+    let pi = Box::new(3.14);
+    let e = Box::new(2.71);
+    assert_eq!(*sum_boxes(pi, e), 5.85);
+
+    println!("Boxes OK");
+}
+
 fn main() {
     integers();
     bits();
@@ -496,5 +513,6 @@ fn main() {
     println!("The max is {max}");
 
     boxes();
+    test_sum_boxes();
 
 }
