@@ -470,7 +470,7 @@ struct Satellite {
 
 impl Satellite {
     fn new(name: &str) -> Satellite {
-        return Satellite { name: String::from(name), velocity: 42.5, altitude: 400.0 }
+        return Satellite { name: String::from(name), velocity: 4.72, altitude: 400.0 }
     }
 }
 
