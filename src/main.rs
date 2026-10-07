@@ -4,6 +4,7 @@
 
 use std::io;
 use std::io::Write;
+use std::mem;
 use rand;
 use std::env;
 use std::fs;
@@ -376,6 +377,61 @@ fn colors() {
     println!("First value is {}", red.0);
 }
 
+struct Rectangle<T, U> {
+    width: T,
+    height: U
+}
+
+impl<T, U> Rectangle<T, U> {
+
+    fn get_width(&self) -> &T {
+        return &self.width;
+    }
+
+    fn new(width: T, height: U) -> Rectangle<T, U> {
+        return Rectangle {
+            width: width,
+            height: height
+        };
+    }
+}
+
+impl Rectangle<f64, f64> {
+    fn get_area(&self) -> f64 {
+        return self.width * self.height;
+    }
+
+    fn scale(&mut self, factor: f64) {
+        self.width *= factor;
+        self.height *= factor;
+    }
+}
+
+fn rectangles() {
+    let mut rect: Rectangle<f64, f64> = Rectangle::<f64, f64>::new(1.2, 3.4);
+    assert_eq!(*rect.get_width(), 1.2);
+    assert_eq!(rect.get_area(), 4.08);
+    rect.scale(0.5);
+    assert_eq!(rect.get_area(), 1.02);
+    println!("Rectangle is OK");
+}
+
+fn get_max<T: PartialOrd>(a: T, b: T) -> T {
+    if a > b {
+        return a;
+    }
+    return b;
+}
+
+fn boxes() {
+    let boxed_car: Box<Car> = Box::new(Car::new("Ford Mustang"));
+    println!("The Mustang takes {} bytes on the stack", mem::size_of_val(&boxed_car));
+    println!("The Mustang takes {} bytes on the heap", mem::size_of_val(&*boxed_car));
+
+    let unboxed_car = *boxed_car;
+    println!("The Mustang now takes {} bytes on the stack", mem::size_of_val(&unboxed_car));
+}
+
 fn main() {
     integers();
     bits();
@@ -434,5 +490,11 @@ fn main() {
 
     structs();
     colors();
+    rectangles();
+
+    let max = get_max(1, 2);
+    println!("The max is {max}");
+
+    boxes();
 
 }
