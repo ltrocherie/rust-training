@@ -273,8 +273,18 @@ fn higher_or_lower() {
     loop {
         println!("Enter your guess:");
         let mut input_buffer = String::new();
-        let _result = io::stdin().read_line(&mut input_buffer);
-        guess = input_buffer.trim().parse().unwrap();
+        let result = io::stdin().read_line(&mut input_buffer);
+        match result {
+            Ok(_) => (),
+            Err(_) => panic!("Could not read from standard input")
+        }
+        guess = match input_buffer.trim().parse() {
+            Ok(number) => number,
+            Err(_) => { 
+                println!("Not a number, try again!");
+                continue;
+            }
+        };
         if guess > number {
             print!("Too high! ");
         } else if guess < number {
@@ -559,6 +569,10 @@ impl Location {
     }
 }
 
+fn panic() {
+    // panic!("oups");
+}
+
 fn locations() {
     Location::Unknown.display();
     Location::Anonymous.display();
@@ -638,5 +652,7 @@ fn main() {
 
     enums();
     locations();
+
+    panic();
 
 }
