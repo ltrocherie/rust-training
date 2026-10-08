@@ -10,6 +10,10 @@ use rand;
 use std::env;
 use std::fs;
 
+use crate::Location::Anonymous;
+use crate::Location::Known;
+use crate::Location::Unknown;
+
 fn integers() {
     let mut car: u8 = 255;
     println!("Hello, world! The world is {}", car);
@@ -485,6 +489,82 @@ fn trait_satellite() {
     println!("Hubble: {}", hubble);
 }
 
+#[derive(Debug)]
+enum Shape {
+    Rectangle(f64, f64),
+    Circle(f64),
+    Square(f64),
+    Triangle(f64, f64, f64)
+}
+
+impl Shape {
+    fn get_perimeter(&self) -> f64 {
+        match *self {
+            Shape::Circle(r) => (std::f64::consts::PI * r * 2.0) as f64,
+            Shape::Rectangle(x, y) => (2.0*x + 2.0*y) as f64,
+            Shape::Square(x) => 4.0*x,
+            Shape::Triangle(x, y, z) => -1.0
+        }
+    }
+}
+
+fn enums() {
+    let shape = Shape::Rectangle(1.2, 2.3);
+    println!("Shape is {shape:?}");
+
+    match shape {
+        Shape::Circle(r) => println!("Is a circle"),
+        Shape::Rectangle(x, y) => println!("Is a rectangle ({x}, {y})"),
+        Shape::Square(x) => println!("Is a square"),
+        Shape::Triangle(x, y, z) => println!("Is a triangle")
+    }
+
+    let number = 1u8;
+    let result = match number {
+        0 => "zero",
+        _ => "not zero"
+    };
+    println!("Result is {result}");
+
+    let perimeter = shape.get_perimeter();
+    println!("Permimeter is {perimeter}");
+
+    let array = [1, 2];
+    let number = array.get(3).unwrap_or(&0) + 1;
+    let number = match array.get(5) {
+        Some(number) => number + 1,
+        None => -1
+    };
+    println!("New number is {number:?}");
+
+    let num = Some(13);
+    if let Some(13) = num {
+        println!("thirteen");
+    }
+}
+
+enum Location {
+    Unknown,
+    Anonymous,
+    Known(f64, f64)
+}
+
+impl Location {
+    fn display(&self) {
+        match self {
+            Unknown => println!("Location unknown"),
+            Anonymous => println!("Location undisclosed"),
+            Known(x, y) => println!("Individual located at {x} {y} coordinates")
+        }
+    }
+}
+
+fn locations() {
+    Location::Unknown.display();
+    Location::Anonymous.display();
+    Location::Known(100.42, 50.7).display();
+}
+
 fn main() {
     integers();
     bits();
@@ -555,5 +635,8 @@ fn main() {
     println!("208: {}", peugeot.describe());
 
     trait_satellite();
+
+    enums();
+    locations();
 
 }
